@@ -92,7 +92,57 @@
 		
         $('#mc-form').ajaxChimp();
 		
-		
+        
+        $( document ).ready(function() {
+            $("#addform").submit(
+                function(e){
+                    e.preventDefault()
+                    sendAjaxForm('result_form', 'addform', '/api/add');
+                    return false; 
+                }
+            );
+        });
+
+
+        function sendAjaxForm(result_form, addform, url) {
+            $.ajax({
+                url:     url, //url страницы (action_ajax_form.php)
+                type:     "POST", //метод отправки
+                dataType: "html", //формат данных
+                data: $("#"+addform).serialize(),  // Сериализуем объект
+                success: function(response) { //Данные отправлены успешно
+                    console.log(response)
+                    var result = $.parseJSON(response);
+                    $('#bloglist').html(`<div class="col-md-12 blog-post">
+                        <div class="post-title">
+                        <a href="/posts/${result._id}"><h1>${result.title}</h1></a>
+                        </div>  
+                        <div class="post-info">
+                            <span>${result.createdAt}</span>
+                        </div> 
+                        <div class="post-info">
+                            <span><a href="category/${result.category}" target="_blank">${result.category}</a></span>
+                        </div>  
+                        <p>${result.postbody}</p>                          			
+                        
+                        <a href='/posts/${result._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                    </div>`);
+                },
+                error: function(response) { // Данные не отправлены
+                    console.log(response)
+                    $('#result_form').html('Ошибка. Данные не отправлены.');
+                }
+             });
+        }
+
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: url,
+        //     data: data,
+        //     success: success,
+        //     dataType: dataType
+        //   });
 		
        
        /* Video and Google Map Popup */
