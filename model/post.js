@@ -3,19 +3,14 @@ const Category = require("./category")
 const connect = require("./connect")
 
 const Post = connect.define('posts', {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
     title: Sequelize.STRING,
-    category: Sequelize.STRING,
+    parentCategory: Sequelize.STRING,
     postbody: Sequelize.TEXT,
-    // Timestamps
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
+},{
+    createdAt: false,
+    updatedAt: false,
 });
 
-Post.belongsTo(Category, {foreignKey: 'category', targetKey: 'title'});
+Post.belongsTo(Category, {foreignKey: 'parentCategory', targetKey: 'title'});
 
 module.exports = Post
