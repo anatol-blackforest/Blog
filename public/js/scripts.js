@@ -106,7 +106,7 @@
 
         function sendAjaxForm(result_form, addform, url) {
             $.ajax({
-                url:     url, //url страницы (action_ajax_form.php)
+                url:     url, //url страницы 
                 type:     "POST", //метод отправки
                 dataType: "html", //формат данных
                 data: $("#"+addform).serialize(),  // Сериализуем объект
@@ -115,7 +115,7 @@
                     var result = $.parseJSON(response);
                     $('#bloglist').html(`<div class="col-md-12 blog-post">
                         <div class="post-title">
-                        <a href="/posts/${result._id}"><h1>${result.title}</h1></a>
+                        <a href="/posts/${result.id}"><h1>${result.title}</h1></a>
                         </div>  
                         <div class="post-info">
                             <span>${result.createdAt}</span>
@@ -123,9 +123,8 @@
                         <div class="post-info">
                             <span><a href="category/${result.category}" target="_blank">${result.category}</a></span>
                         </div>  
-                        <p>${result.postbody}</p>                          			
-                        
-                        <a href='/posts/${result._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                        <p>${result.postbody}</p>         
+                        <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
                     </div>`);
                 },
                 error: function(response) { // Данные не отправлены
