@@ -7,8 +7,8 @@ const CategorySchema = new mongoose.Schema({
     name:{
         type: String,
         unique: true,
-        lowercase:  true, 
-        default: "No title"
+        required: true,
+        lowercase:  true
     }
 }, {
     timestamps: true // createdAt, updatedAt

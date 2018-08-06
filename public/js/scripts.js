@@ -102,10 +102,55 @@
             $("#addform").submit(
                 function(e){
                     e.preventDefault()
-                    sendAjaxForm('result_form', 'addform', '/add');
-                    return false; 
+                    var trigger = true
+                    $('#addform input[type="text"], #addform textarea').each(function(){
+                        if(!$(this).val() || $(this).val() == ''){
+                           $(this).css('border-color','red');//Сделаем бордер красным
+                           trigger = false
+                        }
+                    });
+                    if (trigger) sendAjaxForm('result_form', 'addform', '/add');
                 }
             );
+
+            $("a.posts").click(function(e) {
+                e.preventDefault()
+
+              
+                $.ajax({url: "/posts/", success: function(result){
+                    console.log(result)
+
+                    var htmlPosts = ""
+                    var htmlCats = ""
+                    
+                    result.posts.forEach((item, i) => {
+                        htmlPosts += `<div class="col-md-12 blog-post">
+                            <div class="post-title">
+                                <a href="/posts/${item.id}"><h1>${item.title}</h1></a>
+                            </div>  
+                            <div class="post-info">
+                                <span>Date: ${item.createdAt}</span>
+                            </div> 
+                            <div class="post-info">
+                                <span>Category: <a href="category/${item.category}" target="_blank">${item.category}</a></span>
+                            </div>  
+                            <p>${item.postbody}</p>         
+                            <a href='/posts/${item.id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                        </div>`
+                    })
+                    console.log()
+                    result.categories.forEach((item, i) => {
+                        htmlCats += `<span><a href="/category/${item.id}">${item.name}</a></span>, `
+                    })
+
+                    $('#bloglist').html(htmlPosts)
+                    $('#cats').html(htmlCats)
+                }});
+             
+
+
+            })
+
         });
 
 
@@ -116,7 +161,6 @@
                 dataType: "html", //формат данных
                 data: $("#"+addform).serialize(),  // Сериализуем объект
                 success: function(response) { //Данные отправлены успешно
-                    console.log(response)
                     $('#addformblock').hide()
                     var result = $.parseJSON(response);
                     $('#bloglist').html(`<div class="col-md-12 blog-post">
@@ -133,8 +177,7 @@
                         <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
                     </div>`);
                 },
-                error: function(response) { // Данные не отправлены
-                    console.log(response)
+                error: function() { // Данные не отправлены
                     $('#result_form').html('Ошибка. Данные не отправлены.');
                 }
              });

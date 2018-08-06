@@ -6,6 +6,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
+const postsRouter = require('./routes/posts');
 const addRouter = require('./routes/add');
 const {connection} = require('./models');
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(async(req, res, next) => await connection(req, next))
 
 app.use('/', indexRouter);
+app.use('/posts', postsRouter);
 app.use('/add', addRouter);
 
 // catch 404 and forward to error handler

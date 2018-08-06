@@ -6,10 +6,9 @@ module.exports = async (req, res) => {
         console.log(req.url)
         const posts = await Post.find().limit(postsPerPage).sort({createdAt: -1})
         const categories = await Category.find().sort()
-        return res.status(200).render('index', {posts, categories})
+        return res.status(200).json({posts, categories})
     }catch(err) {
         console.error('Unable to connect to the database:', err);
         res.status(500).json({error: 500});
     };
 }
-
