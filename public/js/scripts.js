@@ -145,32 +145,35 @@
                 }});
 
             })
-            $("#cats span a").click(function(e) {
+            $("#cats").click(function(e) {
                 e.preventDefault()
-                var val = $(e.target).html();
-                $.ajax({
-                    url: `/category/${val}`, 
-                    success: function(result){
-                        console.log(result)
-                        var html = result.name
-                        result.posts.forEach((item, i) => {
-                            html += `<div class="col-md-12 blog-post">
-                                <div class="post-title">
-                                    <a href="/posts/${item._id}"><h1>${item.title}</h1></a>
-                                </div>  
-                                <div class="post-info">
-                                    <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
-                                </div> 
-                                <div class="post-info">
-                                    <span>Category: ${item.category}</span>
-                                </div>  
-                                <p>${item.postbody}</p>         
-                                <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
-                            </div>`
-                        })
-                        $('#bloglist').html(html)
-                    }
-                })
+                if (e.target.nodeName === "A"){
+                    var val = $(e.target).html();
+                    $.ajax({
+                        url: `/category/${val}`, 
+                        success: function(result){
+                            console.log(result)
+                            var html = result.name
+                            result.posts.forEach((item, i) => {
+                                html += `<div class="col-md-12 blog-post">
+                                    <div class="post-title">
+                                        <a href="/posts/${item._id}"><h1>${item.title}</h1></a>
+                                    </div>  
+                                    <div class="post-info">
+                                        <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
+                                    </div> 
+                                    <div class="post-info">
+                                        <span>Category: ${item.category}</span>
+                                    </div>  
+                                    <p>${item.postbody}</p>         
+                                    <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                                </div>`
+                            })
+                            $('#bloglist').html(html)
+                        }
+                    })
+                }
+
             })
             
 
