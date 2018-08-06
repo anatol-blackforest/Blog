@@ -17,7 +17,13 @@ const PostSchema = new mongoose.Schema({
         required: true
     }
 }, {
-    timestamps: true // createdAt, updatedAt
+    timestamps: true, // createdAt, updatedAt
+    toJSON: {
+        virtuals: true
+    },
+    toObject: {
+        virtuals: true // for console.log, to output children
+    }
 });
 
-module.exports = mongoose.model('Posts', PostSchema);
+module.exports = mongoose.model('posts', PostSchema);

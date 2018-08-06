@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
+const categoryRouter = require('./routes/category');
 const addRouter = require('./routes/add');
 const {connection} = require('./models');
 
@@ -26,6 +27,7 @@ app.use(async(req, res, next) => await connection(req, next))
 
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
+app.use('/category', categoryRouter);
 app.use('/add', addRouter);
 
 // catch 404 and forward to error handler

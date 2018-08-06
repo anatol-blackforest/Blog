@@ -11,13 +11,19 @@ const CategorySchema = new mongoose.Schema({
         lowercase:  true
     }
 }, {
-    timestamps: true // createdAt, updatedAt
+    timestamps: true, // createdAt, updatedAt
+    toJSON: {
+        virtuals: true
+    },
+    toObject: {
+        virtuals: true // for console.log, to output children
+    }
 });
 
 CategorySchema.virtual('posts', {
-    ref: 'Post', // The model to use
-    localField: 'category', // Find people where `localField`
-    foreignField: 'name' // is equal to `foreignField`
+    ref: 'posts', // The model to use
+    localField: 'name', // Find people where `localField`
+    foreignField: 'category' // is equal to `foreignField`
 });
 
-module.exports = mongoose.model('Categories', CategorySchema);
+module.exports = mongoose.model('categories', CategorySchema);

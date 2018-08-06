@@ -152,7 +152,7 @@
                                     	<span>Date: {{post.createdAt|date("d.m.Y, H:i:s")}} by Admin</span>
                                     </div>  
                                     <div class="post-info">
-                                      <span>Category: <a href="category/{{post.category}}" target="_blank">{{post.category}}</a></span>
+                                      <span>Category: {{post.category}}</span>
                                   </div> 
                                     <p>{{post.postbody}}</p>                          			
                                     <a href="/posts/{{post._id}}" class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
