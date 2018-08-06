@@ -97,7 +97,7 @@
             $("#addform").submit(
                 function(e){
                     e.preventDefault()
-                    sendAjaxForm('result_form', 'addform', '/api/add');
+                    sendAjaxForm('result_form', 'addform', '/add');
                     return false; 
                 }
             );
