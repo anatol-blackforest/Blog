@@ -146,16 +146,16 @@
                                 {% for post in posts %}
                                 <div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                      <a href="/posts/{{post.id}}"><h1>{{post.title}}</h1></a>
+                                      <a href="/posts/{{post._id}}"><h1>{{post.title}}</h1></a>
                                     </div>  
                                     <div class="post-info">
-                                    	<span>{{post.createdAt|date("m/d/Y")}} by Admin</span>
+                                    	<span>Date: {{post.createdAt|date("d.m.Y, H:i:s")}} by Admin</span>
                                     </div>  
                                     <div class="post-info">
                                       <span>Category: <a href="category/{{post.category}}" target="_blank">{{post.category}}</a></span>
                                   </div> 
                                     <p>{{post.postbody}}</p>                          			
-                                    <a href="/posts/{{post.id}}" class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                                    <a href="/posts/{{post._id}}" class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
                                 </div>
                                 {% endfor %}
 
