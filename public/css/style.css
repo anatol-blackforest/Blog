@@ -75,6 +75,11 @@ a {
     color: #1abc9c;
 }
 
+a.black {
+    text-decoration: none !important;
+    color: #333333 !important;
+}
+
 a:hover,
 a:focus,
 a:active {
@@ -271,6 +276,13 @@ button {
 
 
 /* Menu */
+.topmenu{
+    float: right;
+    list-style: none
+}
+.topmenu-link{
+    float: right
+}
 
 .menu {
     position: absolute;
@@ -1800,4 +1812,8 @@ blockquote {
 
 .uipasta-credit a:hover {
     color: #333333;
+}
+
+#addformblock{
+    display: none
 }

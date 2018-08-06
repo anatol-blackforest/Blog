@@ -65,9 +65,14 @@
                       <div class="my-detail">
                     	
                         <div class="white-spacing">
-                            <h1>Блог</h1>
+                            <h1><a class="black" href="/">Блог</a></h1>
                             <span>Категории</span>
                         </div> 
+                                                        
+                                                        
+                        {% for category in categories %}
+                            <span><a href="/category/{{category.name}}">{{category.name}}</a></span>, 
+                        {% endfor %}
        
                     </div>
                   </div>
@@ -82,20 +87,20 @@
                     		
                             
                             <div class="sub-title">
-                           		<h2>My Blog</h2>
-                                <a href="contact.html"><i class="icon-envelope"></i></a>
+                           		<h2><a class="black" href="/">My Blog</a></h2>
+                                  <ul class="topmenu">
+                                    <li class="topmenu-link">
+                                        <a href="/" id="addpost">Add post</a>
+                                    </li>    
+                                  <ul>
                              </div>
                             
                             
                             <div class="col-md-12 content-page">
 
-
-
-
-
-
-
                            <!-- Contact Me Start -->
+                           <div id="addformblock">
+
                                <div class="post-title margin-top-70">
                                   <h1>Add <span class="main-color">post</span></h1>
                                  </div>
@@ -131,21 +136,28 @@
                                 </div>
                               </div>
                              </div>
+                             </div>
                              <!-- Contact Me End -->
 
                             	
                               <div class="col-md-12 blog" id="bloglist">
                                 <!-- Blog Post Start -->
-                                {# <div class="col-md-12 blog-post">
+                                {% for post in posts %}
+                                <div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                      <a href="single.html"><h1>How to make your company website based on bootstrap framework on localhost?</h1></a>
+                                      <a href="/posts/{{post.id}}"><h1>{{post.title}}</h1></a>
                                     </div>  
                                     <div class="post-info">
-                                    	<span>November 23, 2016 / by <a href="#" target="_blank">Alex Parker</a></span>
+                                    	<span>{{post.createdAt|date("m/d/Y")}} by Admin</span>
                                     </div>  
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique temporibus tempora dicta soluta? Qui hic, voluptatem nemo quo corporis dignissimos voluptatum debitis cumque fugiat mollitia quasi quod. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ut ratione similique.</p>                          			
-                                    <a href="single.html" class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
-                                </div> #}
+                                    <div class="post-info">
+                                      <span>Category: <a href="category/{{post.category}}" target="_blank">{{post.category}}</a></span>
+                                  </div> 
+                                    <p>{{post.postbody}}</p>                          			
+                                    <a href="/posts/{{post.id}}" class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                                </div>
+                                {% endfor %}
+
                                 <!-- Blog Post End -->
                               </div> 
                                 

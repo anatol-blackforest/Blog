@@ -91,7 +91,12 @@
        /* Ajaxchimp for Subscribe Form */
 		
         $('#mc-form').ajaxChimp();
-		
+        
+        $('#addpost').click(function(e) {
+            e.preventDefault()
+            $('#addformblock').toggle()
+        })
+        
         
         $( document ).ready(function() {
             $("#addform").submit(
@@ -112,16 +117,17 @@
                 data: $("#"+addform).serialize(),  // Сериализуем объект
                 success: function(response) { //Данные отправлены успешно
                     console.log(response)
+                    $('#addformblock').hide()
                     var result = $.parseJSON(response);
                     $('#bloglist').html(`<div class="col-md-12 blog-post">
                         <div class="post-title">
-                        <a href="/posts/${result.id}"><h1>${result.title}</h1></a>
+                             <a href="/posts/${result.id}"><h1>${result.title}</h1></a>
                         </div>  
                         <div class="post-info">
-                            <span>${result.createdAt}</span>
+                            <span>Date: ${result.createdAt}</span>
                         </div> 
                         <div class="post-info">
-                            <span><a href="category/${result.category}" target="_blank">${result.category}</a></span>
+                            <span>Category: <a href="category/${result.category}" target="_blank">${result.category}</a></span>
                         </div>  
                         <p>${result.postbody}</p>         
                         <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
