@@ -3,7 +3,6 @@ const {postsPerPage} = require("../config")
 
 module.exports = async (req, res) => {
     try{
-        console.log(req.url)
         const posts = await Post.find().limit(postsPerPage).sort({createdAt: -1})
         const categories = await Category.find().sort()
         return res.status(200).json({posts, categories})

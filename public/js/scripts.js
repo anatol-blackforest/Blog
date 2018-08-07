@@ -123,16 +123,16 @@
                     result.posts.forEach((item, i) => {
                         htmlPosts += `<div class="col-md-12 blog-post">
                             <div class="post-title">
-                                <a href="/posts/${item._id}"><h1>${item.title}</h1></a>
+                                <h1>${item.title}</h1>
                             </div>  
                             <div class="post-info">
                                 <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
                             </div> 
                             <div class="post-info">
-                                <span>Category: <a href="category/${item.category}" >${item.category}</a></span>
+                                <span>Category: ${item.category}</span>
                             </div>  
-                            <p>${item.postbody}</p>         
-                            <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                            <p>${item.postbody.slice(0,100)}...</p>         
+                            <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                         </div>`
                     })
 
@@ -152,12 +152,11 @@
                     $.ajax({
                         url: `/category/${val}`, 
                         success: function(result){
-                            console.log(result)
                             var html = result.name
                             result.posts.forEach((item, i) => {
                                 html += `<div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                        <a href="/posts/${item._id}"><h1>${item.title}</h1></a>
+                                        <h1>${item.title}</h1>
                                     </div>  
                                     <div class="post-info">
                                         <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
@@ -165,8 +164,8 @@
                                     <div class="post-info">
                                         <span>Category: ${item.category}</span>
                                     </div>  
-                                    <p>${item.postbody}</p>         
-                                    <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                                    <p>${item.postbody.slice(0,100)}...</p>         
+                                    <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                                 </div>`
                             })
                             $('#bloglist').html(html)
@@ -176,6 +175,36 @@
 
             })
             
+            $('#bloglist').click(function(e) {
+                e.preventDefault()
+                
+                if (e.target.nodeName === "A"){
+                    var url = $(e.target).attr("href");
+                    var html = ""
+                    $.ajax({
+                        url, 
+                        success: function(result){
+                            var html =`<div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>${result.title}</h1>
+                                </div>  
+                                <div class="post-info">
+                                    <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
+                                </div> 
+                                <div class="post-info">
+                                    <span>Category: ${result.category}</span>
+                                </div>  
+                                <p>${result.postbody}</p>         
+                            </div>`
+                            
+                            $('#bloglist').html(html)
+                        }
+                    });
+		
+
+                }
+            })
+
 
         });
 
@@ -191,16 +220,16 @@
                     var result = $.parseJSON(response);
                     $('#bloglist').html(`<div class="col-md-12 blog-post">
                         <div class="post-title">
-                             <a href="/posts/${result.id}"><h1>${result.title}</h1></a>
+                             <h1>${result.title}</h1>
                         </div>  
                         <div class="post-info">
                             <span>Date: ${result.createdAt}</span>
                         </div> 
                         <div class="post-info">
-                            <span>Category: <a href="category/${result.category}" target="_blank">${result.category}</a></span>
+                            <span>Category: ${result.category}</span>
                         </div>  
                         <p>${result.postbody}</p>         
-                        <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right"><span>Read More</span></a>
+                        <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                     </div>`);
                 },
                 error: function() { // Данные не отправлены
