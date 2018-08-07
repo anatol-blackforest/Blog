@@ -176,10 +176,8 @@
                                 </div>  
                                 <div class="post-info">
                                     <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
-                                </div> 
-                                <div class="post-info">
                                     <span>Category: ${result.category}</span>
-                                </div>  
+                                </div> 
                                 <p>${result.postbody}</p>         
 
                                 <div class="post-info">
