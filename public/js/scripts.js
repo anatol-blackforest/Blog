@@ -173,9 +173,6 @@
                             var html =`<div class="col-md-12 blog-post">
                                 <div class="post-title">
                                     <h1>${result.title}</h1>
-                                    <ul class="knowledge">
-                                        <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
-                                    </ul>
                                 </div>  
                                 <div class="post-info">
                                     <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
@@ -184,6 +181,14 @@
                                     <span>Category: ${result.category}</span>
                                 </div>  
                                 <p>${result.postbody}</p>         
+
+                                <div class="post-info">
+                                    <ul class="knowledge">
+                                        <!-- <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li> -->
+                                        <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
+                                    </ul>
+                                </div> 
+                                
                             </div>`
                             
                             $('#bloglist').html(html)
