@@ -29,6 +29,11 @@
             if (e.target.nodeName === "A" && e.target.id !== "load-more-post"){
                 activePage = 0
             }
+            if (e.target.nodeName === "A"){
+                $('#addform input[type="text"], #addform textarea').each(function(){
+                    $(this).css('border','2px solid transparent');//Сделаем бордер серым
+                });    
+            }
         })
 		
        /* Scroll To Top */
