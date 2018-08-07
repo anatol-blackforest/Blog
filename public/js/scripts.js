@@ -174,7 +174,6 @@
                                 <div class="post-title">
                                     <h1>${result.title}</h1>
                                     <ul class="knowledge">
-                                        <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
                                         <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
                                     </ul>
                                 </div>  
