@@ -1,11 +1,12 @@
 {
   "name": "blog",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www"
   },
+  "author": "Anatol Masterskykh (Blackforest)",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
