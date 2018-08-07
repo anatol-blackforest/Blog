@@ -20,7 +20,7 @@ const CategorySchema = new mongoose.Schema({
     }
 });
 
-CategorySchema.virtual('posts', {
+CategorySchema.virtual('postes', {
     ref: 'posts', // The model to use
     localField: 'name', // Find people where `localField`
     foreignField: 'category' // is equal to `foreignField`

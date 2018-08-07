@@ -10,7 +10,9 @@ const PostSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        default: "No category"
+        unique: true,
+        required: true,
+        lowercase:  true
     },
     postbody: {
         type: String,

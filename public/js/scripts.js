@@ -136,7 +136,8 @@
                         url: `/category/${val}`, 
                         success: function(result){
                             var html = result.name
-                            result.posts.forEach((item, i) => {
+                            console.log(result)
+                            result.postes.forEach((item, i) => {
                                 html += `<div class="col-md-12 blog-post">
                                     <div class="post-title">
                                         <h1><a href='/posts/${item._id}'>${item.title}</a></h1>
@@ -151,6 +152,7 @@
                                     <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                                 </div>`
                             })
+                            console.log(html)
                             $('#bloglist').html(html)
                             $("#load-more-post").hide()
                         }
