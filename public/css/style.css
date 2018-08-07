@@ -1817,3 +1817,12 @@ blockquote {
 #addformblock{
     display: none
 }
+a#addpost{
+    text-decoration: none !important;
+    color: #333333 !important;
+    font-size: 25px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-top: 20px;
+    font-weight: 600;
+}

@@ -68,6 +68,7 @@
         $('#addpost').click(function(e) {
             e.preventDefault()
             $('#addformblock').toggle()
+            $(this).text($(this).text() == '+ Add post' ? '- Add post' : '+ Add post');
         })
         
         
