@@ -11,7 +11,6 @@
          });
 		 		
 		
-		
        /* Smooth Scroll */
 
         $('a.smoth-scroll').on("click", function (e) {
@@ -21,7 +20,6 @@
             }, 1000);
             e.preventDefault();
         });
-				 
 		
         let activePage = 0
         
@@ -91,6 +89,8 @@
                     if (trigger) sendAjaxForm('result_form', 'addform', '/add');
                 }
             );
+        
+            // аякс подгрузка сообщений при клике на главную
 
             $("a.posts").click(function(e) {
                 e.preventDefault()
@@ -125,6 +125,9 @@
                 }});
 
             })
+
+            // аякс подгрузка сообщений из определенной категории при клике на последнюю
+
             $("#cats").click(function(e) {
                 e.preventDefault()
                 if (e.target.nodeName === "A"){
@@ -156,6 +159,8 @@
 
             })
             
+            // аякс подгрузка конкретного сообщения по клике в списке
+
             $('#bloglist').click(function(e) {
                 e.preventDefault()
                 
@@ -168,6 +173,10 @@
                             var html =`<div class="col-md-12 blog-post">
                                 <div class="post-title">
                                     <h1>${result.title}</h1>
+                                    <ul class="knowledge">
+                                        <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
+                                        <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
+                                    </ul>
                                 </div>  
                                 <div class="post-info">
                                     <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
@@ -182,8 +191,21 @@
                             $("#load-more-post").hide()
                         }
                     });
-		
-
+                }else if(e.target.id === "delete"){
+                    var id = e.target.dataset.id
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/delete/${id}`, 
+                        success: function(result){
+                            var html =`<div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>${result.title} deleted!</h1>
+                                </div>  
+                            </div>`
+                            $('#bloglist').html(html)
+                            $("#load-more-post").hide()
+                        }
+                    });
                 }
             })
 
@@ -220,14 +242,6 @@
              });
         }
 
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: url,
-        //     data: data,
-        //     success: success,
-        //     dataType: dataType
-        //   });
 	   
        /* Load More Post */	
        

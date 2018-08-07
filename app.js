@@ -10,6 +10,7 @@ const postsRouter = require('./routes/posts');
 const categoryRouter = require('./routes/category');
 const addRouter = require('./routes/add');
 const pageRouter = require('./routes/page');
+const deleteRouter = require('./routes/delete');
 const {connection} = require('./models');
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/posts', postsRouter);
 app.use('/page', pageRouter);
 app.use('/category', categoryRouter);
 app.use('/add', addRouter);
+app.use('/delete', deleteRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
