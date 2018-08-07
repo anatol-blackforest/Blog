@@ -102,7 +102,7 @@
                     result.posts.forEach((item, i) => {
                         htmlPosts += `<div class="col-md-12 blog-post">
                             <div class="post-title">
-                                <h1>${item.title}</h1>
+                                <h1><a href='/posts/${item._id}'>${item.title}</a></h1>
                             </div>  
                             <div class="post-info">
                                 <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
@@ -126,7 +126,7 @@
 
             })
 
-            // аякс подгрузка сообщений из определенной категории при клике на последнюю
+            // аякс подгрузка сообщений из определенной категории при клике на нее в боковухе
 
             $("#cats").click(function(e) {
                 e.preventDefault()
@@ -139,7 +139,7 @@
                             result.posts.forEach((item, i) => {
                                 html += `<div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                        <h1>${item.title}</h1>
+                                        <h1><a href='/posts/${item._id}'>${item.title}</a></h1>
                                     </div>  
                                     <div class="post-info">
                                         <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
@@ -192,6 +192,7 @@
                         }
                     });
                 }else if(e.target.id === "delete"){
+                    //удаление поста
                     var id = e.target.dataset.id
                     $.ajax({
                         type: "DELETE",
