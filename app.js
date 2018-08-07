@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const categoryRouter = require('./routes/category');
 const addRouter = require('./routes/add');
+const pageRouter = require('./routes/page');
 const {connection} = require('./models');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(async(req, res, next) => await connection(req, next))
 
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
+app.use('/page', pageRouter);
 app.use('/category', categoryRouter);
 app.use('/add', addRouter);
 
