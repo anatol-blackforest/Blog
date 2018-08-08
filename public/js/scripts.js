@@ -328,6 +328,7 @@
                         htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
                     })
 
+                    $("#"+addform).trigger('reset')
                     $('#bloglist').html(htmlPost)
                     $('#cats').html(htmlCats)
                 },
