@@ -136,7 +136,6 @@
                         url: `/category/${val}`, 
                         success: function(result){
                             var html = result.name
-                            console.log(result)
                             result.postes.forEach((item, i) => {
                                 html += `<div class="col-md-12 blog-post">
                                     <div class="post-title">
@@ -152,7 +151,6 @@
                                     <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                                 </div>`
                             })
-                            console.log(html)
                             $('#bloglist').html(html)
                             $("#load-more-post").hide()
                         }
@@ -197,17 +195,25 @@
                     });
                 }else if(e.target.id === "delete"){
                     //удаление поста
+                    var htmlPost = ""
+                    var htmlCats = ""
                     var id = e.target.dataset.id
                     $.ajax({
                         type: "DELETE",
                         url: `/delete/${id}`, 
                         success: function(result){
-                            var html =`<div class="col-md-12 blog-post">
+                            
+                            htmlPost =`<div class="col-md-12 blog-post">
                                 <div class="post-title">
-                                    <h1>${result.title} deleted!</h1>
+                                    <h1>${result.deleted.title} deleted!</h1>
                                 </div>  
                             </div>`
-                            $('#bloglist').html(html)
+                            result.categories.forEach((item, i) => {
+                                htmlCats += `<span><a href="/category/${item.name}">${item.name}</a></span>, `
+                            })
+                            $('#bloglist').html(htmlPost)
+                            $('#cats').html(htmlCats)
+
                             $("#load-more-post").hide()
                         }
                     });
@@ -217,29 +223,38 @@
 
         });
 
-
+        //добавление поста
         function sendAjaxForm(result_form, addform, url) {
+            var htmlPost = ""
+            var htmlCats = ""
             $.ajax({
                 url:     url, //url страницы 
                 type:     "POST", //метод отправки
                 dataType: "html", //формат данных
                 data: $("#"+addform).serialize(),  // Сериализуем объект
                 success: function(response) { //Данные отправлены успешно
-                    $('#addformblock').hide()
                     var result = $.parseJSON(response);
-                    $('#bloglist').html(`<div class="col-md-12 blog-post">
+                    $('#addformblock').hide()
+                    htmlPost = `<div class="col-md-12 blog-post">
                         <div class="post-title">
-                             <h1>${result.title}</h1>
+                             <h1>${result.post.title}</h1>
                         </div>  
                         <div class="post-info">
-                            <span>Date: ${result.createdAt}</span>
+                            <span>Date: ${result.post.createdAt}</span>
                         </div> 
                         <div class="post-info">
-                            <span>Category: ${result.category}</span>
+                            <span>Category: ${result.post.category}</span>
                         </div>  
-                        <p>${result.postbody}</p>         
+                        <p>${result.post.postbody}</p>         
                         <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
-                    </div>`);
+                    </div>`
+
+                    result.categories.forEach((item, i) => {
+                        htmlCats += `<span><a href="/category/${item.name}">${item.name}</a></span>, `
+                    })
+
+                    $('#bloglist').html(htmlPost)
+                    $('#cats').html(htmlCats)
                 },
                 error: function() { // Данные не отправлены
                     $('#result_form').html('Ошибка. Данные не отправлены.');
