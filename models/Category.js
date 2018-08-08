@@ -6,8 +6,8 @@ mongoose.Promise = Promise;
 const CategorySchema = new mongoose.Schema({
     name:{
         type: String,
-        unique: true,
         required: true,
+        unique: true,
         lowercase:  true
     }
 }, {
