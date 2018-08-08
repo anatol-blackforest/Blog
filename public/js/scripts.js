@@ -322,7 +322,6 @@
                             <span>Category: ${result.post.category}</span>
                         </div>  
                         <p>${result.post.postbody}</p>         
-                        <a href='/posts/${result.id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                     </div>`
 
                     result.categories.forEach((item, i) => {
