@@ -146,15 +146,15 @@
                                 {% for post in posts %}
                                 <div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                      <h1><a href="/posts/{{post._id}}">{{post.title}}</a></h1> 
+                                      <h1><a href="/posts/{{post._id}}">{{post.title|striptags}}</a></h1> 
                                     </div>  
                                     <div class="post-info">
-                                    	<span>Date: {{post.createdAt|date("d.m.Y, H:i:s")}} by Admin</span>
+                                    	<span>Date: {{post.createdAt|date("d.m.Y, H:i:s")|striptags}} by Admin</span>
                                     </div>  
                                     <div class="post-info">
-                                      <span>Category: {{post.category}}</span>
+                                      <span>Category: {{post.category|striptags}}</span>
                                   </div> 
-                                    <p>{{post.postbody}}</p>                          			
+                                    <p>{{post.postbody|truncate(100, true)|striptags}}</p>                          			
                                     <a href="/posts/{{post._id}}" class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                                 </div>
                                 {% endfor %}

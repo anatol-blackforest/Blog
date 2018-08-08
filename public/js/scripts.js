@@ -3,6 +3,10 @@
 
     jQuery(document).ready(function () {
 
+    var tagRemover = function (string) {
+        return string.replace(/(<([^>]+)>)/ig,"");
+    }
+        
         
        /* Preloader */
 		
@@ -112,15 +116,15 @@
                                 $('#addformblock').hide()
                                 var html = `<div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                         <h1>${result.title}</h1>
+                                         <h1>${tagRemover(result.title)}</h1>
                                     </div>  
                                     <div class="post-info">
                                         <span>Date: ${result.createdAt}</span>
                                     </div> 
                                     <div class="post-info">
-                                        <span>Category: ${result.category}</span>
+                                        <span>Category: ${tagRemover(result.category)}</span>
                                     </div>  
-                                    <p>${result.postbody}</p>         
+                                    <p>${tagRemover(result.postbody)}</p>         
                                 </div>`
                                 
                                 $('#bloglist').html(html)
@@ -134,10 +138,6 @@
                 }
             );
 
-
-
-
-
         
             // аякс подгрузка сообщений при клике на главную
 
@@ -147,19 +147,19 @@
 
                     var htmlPosts = ""
                     var htmlCats = ""
-                    
+
                     result.posts.forEach((item, i) => {
                         htmlPosts += `<div class="col-md-12 blog-post">
                             <div class="post-title">
-                                <h1><a href='/posts/${item._id}'>${item.title}</a></h1>
+                                <h1><a href='/posts/${item._id}'>${tagRemover(item.title)}</a></h1>
                             </div>  
                             <div class="post-info">
                                 <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
                             </div> 
                             <div class="post-info">
-                                <span>Category: ${item.category}</span>
+                                <span>Category: ${tagRemover(item.category)}</span>
                             </div>  
-                            <p>${item.postbody.slice(0,100)}...</p>         
+                            <p>${tagRemover(item.postbody).slice(0,100)}...</p>      
                             <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                         </div>`
                     })
@@ -188,15 +188,15 @@
                             result.postes.forEach((item, i) => {
                                 html += `<div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                        <h1><a href='/posts/${item._id}'>${item.title}</a></h1>
+                                        <h1><a href='/posts/${item._id}'>${tagRemover(item.title)}</a></h1>
                                     </div>  
                                     <div class="post-info">
                                         <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
                                     </div> 
                                     <div class="post-info">
-                                        <span>Category: ${item.category}</span>
+                                        <span>Category: ${tagRemover(item.category)}</span>
                                     </div>  
-                                    <p>${item.postbody.slice(0,100)}...</p>         
+                                    <p>${tagRemover(item.postbody).slice(0,100)}...</p>         
                                     <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                                 </div>`
                             })
@@ -222,7 +222,7 @@
                             var html =`<div class="col-md-12 blog-post">
                                 
                             <div class="post-title">
-                                <h1>${result.title}</h1>
+                                <h1>${tagRemover(result.title)}</h1>
                             </div> 
 
                             <div id="postblock">     
@@ -230,21 +230,21 @@
                                     <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
                                 </div> 
                                 <div class="post-info">
-                                    <span>Category: ${result.category}</span>
+                                    <span>Category: ${tagRemover(result.category)}</span>
                                 </div>  
-                                <p>${result.postbody}</p>    
+                                <p>${tagRemover(result.postbody)}</p>    
                             </div>  
                             
                             <form name="editform"  style="display: none" id="editform">
 
                                 <div class="col-sm-12">
                                     <p>Title:</p>
-                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${result.title}"></p>
+                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${tagRemover(result.title)}"></p>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="textarea-message form-group">
                                         <p>Post:</p>
-                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${result.postbody}</textarea>
+                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${tagRemover(result.postbody)}</textarea>
                                     </div>
                                 </div>
                                 <div class="text-center">      
@@ -278,11 +278,11 @@
                             
                             htmlPost =`<div class="col-md-12 blog-post">
                                 <div class="post-title">
-                                    <h1>${result.deleted.title} deleted!</h1>
+                                    <h1>${tagRemover(result.deleted.title)} deleted!</h1>
                                 </div>  
                             </div>`
                             result.categories.forEach((item, i) => {
-                                htmlCats += `<span><a href="/category/${item.name}">${item.name}</a></span>, `
+                                htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
                             })
                             $('#bloglist').html(htmlPost)
                             $('#cats').html(htmlCats)
@@ -313,19 +313,19 @@
                     $('#addformblock').hide()
                     htmlPost = `<div class="col-md-12 blog-post">
                         <div class="post-title">
-                             <h1>${result.post.title}</h1>
+                             <h1>${tagRemover(result.post.title)}</h1>
                         </div>  
                         <div class="post-info">
                             <span>Date: ${result.post.createdAt}</span>
                         </div> 
                         <div class="post-info">
-                            <span>Category: ${result.post.category}</span>
+                            <span>Category: ${tagRemover(result.post.category)}</span>
                         </div>  
-                        <p>${result.post.postbody}</p>         
+                        <p>${tagRemover(result.post.postbody)}</p>         
                     </div>`
 
                     result.categories.forEach((item, i) => {
-                        htmlCats += `<span><a href="/category/${item.name}">${item.name}</a></span>, `
+                        htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
                     })
 
                     $('#bloglist').html(htmlPost)
@@ -347,15 +347,15 @@
                 result.posts.forEach((item, i) => {
                     htmlPosts += `<div class="col-md-12 blog-post">
                         <div class="post-title">
-                            <h1>${item.title}</h1>
+                            <h1>${tagRemover(item.title)}</h1>
                         </div>  
                         <div class="post-info">
                             <span>Date: ${new Date(item.createdAt).toLocaleString()} by Admin</span>
                         </div> 
                         <div class="post-info">
-                            <span>Category: ${item.category}</span>
+                            <span>Category: ${tagRemover(item.category)}</span>
                         </div>  
-                        <p>${item.postbody.slice(0,100)}...</p>         
+                        <p>${tagRemover(item.postbody).slice(0,100)}...</p>        
                         <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                     </div>`
                 })
