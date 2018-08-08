@@ -89,6 +89,55 @@
                     if (trigger) sendAjaxForm('result_form', 'addform', '/add');
                 }
             );
+
+
+
+
+
+            $("#bloglist").click(
+                function(e){
+                    e.preventDefault()
+                    var trigger = true
+                    if (e.target.id === "editsubmitbutton"){
+                        var form = $(e.target).closest("#editform")
+
+                        $.ajax({
+                            type: "PUT",
+                            url: `/posts/${e.target.dataset.id}`, 
+                            dataType: "html", //формат данных
+                            data: form.serialize(),  // Сериализуем объект
+                            success: function(response){
+
+                                var result = $.parseJSON(response);
+                                $('#addformblock').hide()
+                                var html = `<div class="col-md-12 blog-post">
+                                    <div class="post-title">
+                                         <h1>${result.title}</h1>
+                                    </div>  
+                                    <div class="post-info">
+                                        <span>Date: ${result.createdAt}</span>
+                                    </div> 
+                                    <div class="post-info">
+                                        <span>Category: ${result.category}</span>
+                                    </div>  
+                                    <p>${result.postbody}</p>         
+                                </div>`
+                                
+                                $('#bloglist').html(html)
+                                $("#load-more-post").hide()
+                                $("#editform").hide()
+                            }
+                        });
+
+
+                    }
+                }
+            );
+
+
+
+
+
         
             // аякс подгрузка сообщений при клике на главную
 
@@ -171,23 +220,47 @@
                         url, 
                         success: function(result){
                             var html =`<div class="col-md-12 blog-post">
-                                <div class="post-title">
-                                    <h1>${result.title}</h1>
-                                </div>  
+                                
+                            <div class="post-title">
+                                <h1>${result.title}</h1>
+                            </div> 
+
+                            <div id="postblock">     
                                 <div class="post-info">
                                     <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
-                                    <span>Category: ${result.category}</span>
                                 </div> 
-                                <p>${result.postbody}</p>         
-
                                 <div class="post-info">
-                                    <ul class="knowledge">
-                                        <!-- <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li> -->
-                                        <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
-                                    </ul>
-                                </div> 
-                                
-                            </div>`
+                                    <span>Category: ${result.category}</span>
+                                </div>  
+                                <p>${result.postbody}</p>    
+                            </div>  
+                            
+                            <form name="editform"  style="display: none" id="editform">
+
+                                <div class="col-sm-12">
+                                    <p>Title:</p>
+                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${result.title}"></p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="textarea-message form-group">
+                                        <p>Post:</p>
+                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${result.postbody}</textarea>
+                                    </div>
+                                </div>
+                                <div class="text-center">      
+                                    <button type="submit" data-id="${result._id}" id="editsubmitbutton" class="load-more-button">Edit</button>
+                                </div>
+               
+                            </form>
+
+                            <div>
+                                <ul class="knowledge">
+                                    <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
+                                    <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
+                                </ul>
+                            </div> 
+
+                        </div>`
                             
                             $('#bloglist').html(html)
                             $("#load-more-post").hide()
@@ -217,6 +290,9 @@
                             $("#load-more-post").hide()
                         }
                     });
+                }else if(e.target.id === "edit"){
+                    $("#editform").toggle()
+                    $("#postblock").toggle()
                 }
             })
 
