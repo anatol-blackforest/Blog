@@ -10,6 +10,7 @@ const PostSchema = new mongoose.Schema({
     },
     category: {
         type: String,
+        ref:  'categories',
         lowercase:  true
     },
     postbody: {
