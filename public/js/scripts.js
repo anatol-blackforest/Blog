@@ -78,8 +78,10 @@
             $(this).text($(this).text() == '+ Add post' ? '- Add post' : '+ Add post');
         })
         
-        
+        // CRUD
+
         $( document ).ready(function() {
+            //добавление поста
             $("#addform").submit(
                 function(e){
                     e.preventDefault()
@@ -90,53 +92,174 @@
                            trigger = false
                         }
                     });
-                    if (trigger) sendAjaxForm('result_form', 'addform', '/add');
-                }
-            );
-
-
-
-
-
-            $("#bloglist").click(
-                function(e){
-                    e.preventDefault()
-                    var trigger = true
-                    if (e.target.id === "editsubmitbutton"){
-                        var form = $(e.target).closest("#editform")
-
+                    
+                    if (trigger) { 
+                        var htmlPost = ""
+                        var htmlCats = ""
                         $.ajax({
-                            type: "PUT",
-                            url: `/posts/${e.target.dataset.id}`, 
+                            url:     "/posts", //url страницы 
+                            type:     "POST", //метод отправки
                             dataType: "html", //формат данных
-                            data: form.serialize(),  // Сериализуем объект
-                            success: function(response){
-
+                            data: $("#addform").serialize(),  // Сериализуем объект
+                            success: function(response) { //Данные отправлены успешно
                                 var result = $.parseJSON(response);
                                 $('#addformblock').hide()
-                                var html = `<div class="col-md-12 blog-post">
+                                htmlPost = `<div class="col-md-12 blog-post">
                                     <div class="post-title">
-                                         <h1>${tagRemover(result.title)}</h1>
+                                        <h1>${tagRemover(result.post.title)}</h1>
                                     </div>  
                                     <div class="post-info">
-                                        <span>Date: ${result.createdAt}</span>
+                                        <span>Date: ${result.post.createdAt}</span>
                                     </div> 
                                     <div class="post-info">
-                                        <span>Category: ${tagRemover(result.category)}</span>
+                                        <span>Category: ${tagRemover(result.post.category)}</span>
                                     </div>  
-                                    <p>${tagRemover(result.postbody)}</p>         
+                                    <p>${tagRemover(result.post.postbody)}</p>         
                                 </div>`
-                                
-                                $('#bloglist').html(html)
+
+                                result.categories.forEach((item, i) => {
+                                    htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
+                                })
+
+                                $("#addform").trigger('reset')
+                                $('#bloglist').html(htmlPost)
                                 $("#load-more-post").hide()
-                                $("#editform").hide()
+                                $('#cats').html(htmlCats)
+                            },
+                            error: function() { // Данные не отправлены
+                                $('#result_form').html('Ошибка. Данные не отправлены.');
                             }
                         });
 
-
                     }
+                    
+
                 }
             );
+
+            
+            $("#bloglist").click(function(e){
+                e.preventDefault()
+
+                // аякс подгрузка конкретного сообщения по клике в списке
+                if (e.target.nodeName === "A"){
+                    var url = $(e.target).attr("href");
+                    var html = ""
+                    $.ajax({
+                        url, 
+                        success: function(result){
+                            var html =`<div class="col-md-12 blog-post">
+                                
+                            <div class="post-title">
+                                <h1>${tagRemover(result.title)}</h1>
+                            </div> 
+
+                            <div id="postblock">     
+                                <div class="post-info">
+                                    <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
+                                </div> 
+                                <div class="post-info">
+                                    <span>Category: ${tagRemover(result.category)}</span>
+                                </div>  
+                                <p>${tagRemover(result.postbody)}</p>    
+                            </div>  
+                            
+                            <form name="editform"  style="display: none" id="editform">
+
+                                <div class="col-sm-12">
+                                    <p>Title:</p>
+                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${tagRemover(result.title)}"></p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="textarea-message form-group">
+                                        <p>Post:</p>
+                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${tagRemover(result.postbody)}</textarea>
+                                    </div>
+                                </div>
+                                <div class="text-center">      
+                                    <button type="submit" data-id="${result._id}" id="editsubmitbutton" class="load-more-button">Edit</button>
+                                </div>
+               
+                            </form>
+
+                            <div>
+                                <ul class="knowledge">
+                                    <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
+                                    <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
+                                </ul>
+                            </div> 
+
+                        </div>`
+                            
+                            $('#bloglist').html(html)
+                            $("#load-more-post").hide()
+                        }
+                    });
+                }
+
+                if(e.target.id === "edit"){
+                    $("#editform").toggle()
+                    $("#postblock").toggle()
+                }
+
+                //редактирование поста
+                if (e.target.id === "editsubmitbutton"){
+                    var form = $(e.target).closest("#editform")
+                    $.ajax({
+                        type: "PUT",
+                        url: `/posts/${e.target.dataset.id}`, 
+                        dataType: "html", //формат данных
+                        data: form.serialize(),  // Сериализуем объект
+                        success: function(response){
+
+                            var result = $.parseJSON(response);
+                            $('#addformblock').hide()
+                            var html = `<div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                        <h1>${tagRemover(result.title)}</h1>
+                                </div>  
+                                <div class="post-info">
+                                    <span>Date: ${result.createdAt}</span>
+                                </div> 
+                                <div class="post-info">
+                                    <span>Category: ${tagRemover(result.category)}</span>
+                                </div>  
+                                <p>${tagRemover(result.postbody)}</p>         
+                            </div>`
+                            
+                            $('#bloglist').html(html)
+                            $("#load-more-post").hide()
+                            $("#editform").hide()
+                        }
+                    });
+                }
+                 
+                //удаление поста
+                if(e.target.id === "delete"){
+                    var htmlPost = ""
+                    var htmlCats = ""
+                    var id = e.target.dataset.id
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/posts/${id}`, 
+                        success: function(result){
+                            
+                            htmlPost =`<div class="col-md-12 blog-post">
+                                <div class="post-title">
+                                    <h1>${tagRemover(result.deleted.title)} deleted!</h1>
+                                </div>  
+                            </div>`
+                            result.categories.forEach((item, i) => {
+                                htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
+                            })
+                            $('#bloglist').html(htmlPost)
+                            $('#cats').html(htmlCats)
+                            $("#load-more-post").hide()
+                        }
+                    });
+                } 
+
+            });
 
         
             // аякс подгрузка сообщений при клике на главную
@@ -207,136 +330,8 @@
                 }
 
             })
-            
-            // аякс подгрузка конкретного сообщения по клике в списке
-
-            $('#bloglist').click(function(e) {
-                e.preventDefault()
-                
-                if (e.target.nodeName === "A"){
-                    var url = $(e.target).attr("href");
-                    var html = ""
-                    $.ajax({
-                        url, 
-                        success: function(result){
-                            var html =`<div class="col-md-12 blog-post">
-                                
-                            <div class="post-title">
-                                <h1>${tagRemover(result.title)}</h1>
-                            </div> 
-
-                            <div id="postblock">     
-                                <div class="post-info">
-                                    <span>Date: ${new Date(result.createdAt).toLocaleString()} by Admin</span>
-                                </div> 
-                                <div class="post-info">
-                                    <span>Category: ${tagRemover(result.category)}</span>
-                                </div>  
-                                <p>${tagRemover(result.postbody)}</p>    
-                            </div>  
-                            
-                            <form name="editform"  style="display: none" id="editform">
-
-                                <div class="col-sm-12">
-                                    <p>Title:</p>
-                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${tagRemover(result.title)}"></p>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="textarea-message form-group">
-                                        <p>Post:</p>
-                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${tagRemover(result.postbody)}</textarea>
-                                    </div>
-                                </div>
-                                <div class="text-center">      
-                                    <button type="submit" data-id="${result._id}" id="editsubmitbutton" class="load-more-button">Edit</button>
-                                </div>
-               
-                            </form>
-
-                            <div>
-                                <ul class="knowledge">
-                                    <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
-                                    <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
-                                </ul>
-                            </div> 
-
-                        </div>`
-                            
-                            $('#bloglist').html(html)
-                            $("#load-more-post").hide()
-                        }
-                    });
-                }else if(e.target.id === "delete"){
-                    //удаление поста
-                    var htmlPost = ""
-                    var htmlCats = ""
-                    var id = e.target.dataset.id
-                    $.ajax({
-                        type: "DELETE",
-                        url: `/delete/${id}`, 
-                        success: function(result){
-                            
-                            htmlPost =`<div class="col-md-12 blog-post">
-                                <div class="post-title">
-                                    <h1>${tagRemover(result.deleted.title)} deleted!</h1>
-                                </div>  
-                            </div>`
-                            result.categories.forEach((item, i) => {
-                                htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
-                            })
-                            $('#bloglist').html(htmlPost)
-                            $('#cats').html(htmlCats)
-
-                            $("#load-more-post").hide()
-                        }
-                    });
-                }else if(e.target.id === "edit"){
-                    $("#editform").toggle()
-                    $("#postblock").toggle()
-                }
-            })
-
 
         });
-
-        //добавление поста
-        function sendAjaxForm(result_form, addform, url) {
-            var htmlPost = ""
-            var htmlCats = ""
-            $.ajax({
-                url:     url, //url страницы 
-                type:     "POST", //метод отправки
-                dataType: "html", //формат данных
-                data: $("#"+addform).serialize(),  // Сериализуем объект
-                success: function(response) { //Данные отправлены успешно
-                    var result = $.parseJSON(response);
-                    $('#addformblock').hide()
-                    htmlPost = `<div class="col-md-12 blog-post">
-                        <div class="post-title">
-                             <h1>${tagRemover(result.post.title)}</h1>
-                        </div>  
-                        <div class="post-info">
-                            <span>Date: ${result.post.createdAt}</span>
-                        </div> 
-                        <div class="post-info">
-                            <span>Category: ${tagRemover(result.post.category)}</span>
-                        </div>  
-                        <p>${tagRemover(result.post.postbody)}</p>         
-                    </div>`
-
-                    result.categories.forEach((item, i) => {
-                        htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
-                    })
-
-                    $("#"+addform).trigger('reset')
-                    $('#bloglist').html(htmlPost)
-                    $('#cats').html(htmlCats)
-                },
-                error: function() { // Данные не отправлены
-                    $('#result_form').html('Ошибка. Данные не отправлены.');
-                }
-             });
-        }
 
 	   
        /* Load More Post */	
