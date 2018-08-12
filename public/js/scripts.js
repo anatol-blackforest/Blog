@@ -286,9 +286,9 @@
                             <a href='/posts/${item._id}' class="button button-style button-anim fa fa-long-arrow-right">Read More</a>
                         </div>`
                     })
-
+                    
                     result.categories.forEach((item, i) => {
-                        htmlCats += `<span><a href="/category/${item.name}">${item.name}</a></span>, `
+                        htmlCats += `<span><a href="/category/${tagRemover(item.name)}">${tagRemover(item.name)}</a></span>, `
                     })
 
                     $('#bloglist').html(htmlPosts)
