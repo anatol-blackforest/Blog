@@ -132,14 +132,61 @@
                         });
 
                     }
-                    
-
                 }
             );
 
-            
+
+            //регистрация
+            $("#register").click(function(e){
+                e.preventDefault()
+
+                var html =`<div class="col-md-12 blog-post">
+                    <div class="post-title">
+                        <h1>Register</h1>
+                    </div> 
+
+                    <form name="registerform" id="registerform">
+
+                        <div class="col-sm-12">
+                            <p>Name:</p>
+                            <p><input type="text" id="name" name="name" class="form-control" placeholder="Name"></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <p>Password:</p>
+                            <p><input type="password" id="password" name="password" class="form-control" placeholder="Password"></p>
+                        </div>
+                        <div class="text-center">      
+                            <button type="submit" id="registerbutton" class="load-more-button">Submit</button>
+                        </div>
+
+                    </form>
+                </div>`
+
+                $('#bloglist').html(html)
+                $("#load-more-post").hide()
+            })
+        
+
             $("#bloglist").click(function(e){
                 e.preventDefault()
+
+                //обработка фомы регистрации
+                if (e.target.id === "registerbutton"){
+                    $.ajax({
+                        url:     "/register", //url страницы 
+                        type:     "POST", //метод отправки
+                        dataType: "html", //формат данных
+                        data: $("#registerform").serialize(),  // Сериализуем объект
+                        success: function(response) { //Данные отправлены успешно
+                            var result = $.parseJSON(response);
+                            $('#bloglist h1').text(result.hint);
+                        },
+                        error: function(response) { // Данные не отправлены
+                            var result = $.parseJSON(response.responseText);
+                            $('#bloglist h1').text(result.hint);
+                        }
+                    });
+                }
 
                 // аякс подгрузка конкретного сообщения по клике в списке
                 if (e.target.nodeName === "A"){
