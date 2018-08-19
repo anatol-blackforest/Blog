@@ -8,7 +8,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('cookie-session');
 
-const {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter} = require('./routes/');
+const {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter, logoutRouter} = require('./routes/');
+const {getAccount} = require('./controllers');
 const {connection} = require('./models');
 const {key} = require('./config');
 
@@ -24,23 +25,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({keys: [key]}));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //коннекты к базе
 app.use(async(req, res, next) => await connection(req, next))
 
 //проверяем админский хэш в сессии
-// passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
+passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
 
-// passport.serializeUser((user, done) => done(null, user));
-// passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 
 app.use('/', homeRouter);
 app.use('/posts', postsRouter);
 app.use('/page', pageRouter);
 app.use('/category', categoryRouter);
 app.use('/register', registerRouter);
+app.use('/login/', loginRouter);
+app.use('/logout/', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));

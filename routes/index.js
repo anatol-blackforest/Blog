@@ -4,5 +4,7 @@ const postsRouter = require("./posts")
 const categoryRouter = require("./category")
 const pageRouter = require("./page")
 const registerRouter = require("./register")
+const loginRouter = require("./login")
+const logoutRouter = require("./logout")
 
-module.exports = {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter}
+module.exports = {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter, logoutRouter}

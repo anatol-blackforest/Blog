@@ -8,6 +8,7 @@ const update = require("./update")
 const category = require("./category")
 const deleteCtrl = require("./deleteCtrl")
 const register = require("./register")
+const getAccount = require("./getaccount")
 
 module.exports = {
     list,
@@ -18,5 +19,6 @@ module.exports = {
     update,
     category,
     deleteCtrl,
-    register
+    register,
+    getAccount
 }

@@ -81,6 +81,26 @@
         // CRUD
 
         $( document ).ready(function() {
+
+            $("#loginform").on('submit',
+                function(e){
+                    e.preventDefault()
+                    $.ajax({
+                        url:     "/login/", //url страницы 
+                        type:     "POST", //метод отправки
+                        dataType: "html", //формат данных
+                        data: $("#loginform").serialize(),  // Сериализуем объект
+                        success: function(response) { //Данные отправлены успешно
+                            // var result = $.parseJSON(response);
+                            console.log(response)
+                        },
+                        error: function(response) { // Данные не отправлены
+                            console.log(response)
+                        }
+                    });
+                }
+            )
+
             //добавление поста
             $("#addform").submit(
                 function(e){
@@ -165,7 +185,6 @@
                 $('#bloglist').html(html)
                 $("#load-more-post").hide()
             })
-        
 
             $("#bloglist").click(function(e){
                 e.preventDefault()
