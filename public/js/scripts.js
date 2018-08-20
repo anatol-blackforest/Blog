@@ -113,7 +113,6 @@
                 $("#logout").hide()
                 $("#addpost").hide()
                 $("#addformblock").hide()
-                
             })
 
             //добавление поста
@@ -232,7 +231,6 @@
                     $.ajax({
                         url, 
                         success: function(result){
-                            console.log(JWToken)
                             result = result._doc
                             var html =`<div class="col-md-12 blog-post">
                                 
