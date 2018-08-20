@@ -1,15 +1,14 @@
 //считываем админаккаунт с базы для сравнения с данными авторизации
 const {Admin} = require('../models');
-const {noAuth} =  require('../config/messages');
 const crypto = require('./crypto');
 
-module.exports = async (req, name, password, done) => {
-    try{
-        password = crypto(password)
-        let admin = await Admin.findOne({name, password})
+module.exports = async (payload, done) => {
+    try {
+        const admin = await Admin.findById(payload.userId).select('name id')
         return (admin) ? done(null, admin) : done(null, false)
-    }catch(err){
+    } catch (e) {
         done(null, false)
-        console.error(err)
+        console.log(e)
     }
 };
+

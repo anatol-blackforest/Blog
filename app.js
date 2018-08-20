@@ -1,15 +1,13 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const session = require('cookie-session');
+const {Strategy, ExtractJwt} = require('passport-jwt')
 
 const {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter, logoutRouter} = require('./routes/');
-const {getAccount} = require('./controllers');
+const {passportCtrl} = require('./controllers');
 const {connection} = require('./models');
 const {key} = require('./config');
 
@@ -22,20 +20,24 @@ app.set('view engine', 'twig');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({keys: [key]}));
 app.use(passport.initialize());
-app.use(passport.session());
 
 //коннекты к базе
 app.use(async(req, res, next) => await connection(req, next))
 
 //проверяем админский хэш в сессии
-passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+passport.use(new Strategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: key
+}, (payload, done) => passportCtrl(payload, done)))
+
+
+// passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
+
+// passport.serializeUser((user, done) => done(null, user));
+// passport.deserializeUser((user, done) => done(null, user));
 
 app.use('/', homeRouter);
 app.use('/posts', postsRouter);
