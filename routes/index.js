@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const {list} = require('../controllers');
+// сводим роуты
+const homeRouter = require("./home")
+const postsRouter = require("./posts")
+const categoryRouter = require("./category")
+const pageRouter = require("./page")
+const registerRouter = require("./register")
+const loginRouter = require("./login")
 
-/* GET start page. */
-router.get('/', list);
-
-module.exports = router;
+module.exports = {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter}

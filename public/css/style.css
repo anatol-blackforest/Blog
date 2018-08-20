@@ -1824,8 +1824,14 @@ a#addpost{
     color: #333333 !important;
     font-size: 25px;
     letter-spacing: 0.5px;
-    display: inline-block;
+    display: none;
     margin-top: 20px;
     font-weight: 600;
 }
-
+#loginform{
+    padding: 10px 5px
+}
+#logout{
+    padding: 10px 5px;
+    display: none
+}

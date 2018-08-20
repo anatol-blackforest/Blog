@@ -75,7 +75,31 @@
                           {% endfor %}
                         </div>
        
-                    </div>
+                       </div>
+
+
+                        <div class="my-detail">   
+                            <form name="loginform" action="/login" method="post" id="loginform">
+                                <h4>Login</h4>
+                                <div class="form-group">
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="Your name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Your password">
+                                </div>
+                                <div class="form-group text-center">      
+		                            <button type="submit" name="submit" id="loginformsubmit">Send</button>
+	                            </div>
+                                <div class="form-group text-center">      
+		                            <a href="#" id="register">Register</a>
+	                            </div>
+                            </form>
+                            <div id="logout">
+                                <button  id="logoutbutton">Logout</button>
+                            </div>
+                        </div>
+
+
                   </div>
                   <!-- About Me (Left Sidebar) End -->
                 

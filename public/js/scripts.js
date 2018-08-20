@@ -1,6 +1,6 @@
 (function ($) {
     'use strict';
-
+    
     jQuery(document).ready(function () {
 
     var tagRemover = function (string) {
@@ -81,6 +81,41 @@
         // CRUD
 
         $( document ).ready(function() {
+            
+            //токен авторизации
+            let JWToken = null
+
+            //авторизация
+            $("#loginform").on('submit', function(e){
+                e.preventDefault()
+                $.ajax({
+                    url:     "/login/", //url страницы 
+                    type:     "POST", //метод отправки
+                    dataType: "html", //формат данных
+                    data: $("#loginform").serialize(),  // Сериализуем объект
+                    success: function(response) { //Данные отправлены успешно
+                        var {token} = $.parseJSON(response);
+                        JWToken = token
+                        $("#loginform").hide()
+                        $("#logout").show()
+                        $("#addpost").show()
+                    },
+                    error: function(response) { // Данные не отправлены
+                        console.log(response)
+                    }
+                });
+            })
+
+            //выход
+            $("#logoutbutton").on('click', function(e){
+                JWToken = null
+                $("#loginform").show()
+                $("#logout").hide()
+                $("#addpost").hide()
+                $("#addformblock").hide()
+                
+            })
+
             //добавление поста
             $("#addform").submit(
                 function(e){
@@ -98,6 +133,9 @@
                         var htmlCats = ""
                         $.ajax({
                             url:     "/posts", //url страницы 
+                            beforeSend: function (xhr) { //наш токен любимый 
+                                xhr.setRequestHeader('Authorization', JWToken);
+                            },
                             type:     "POST", //метод отправки
                             dataType: "html", //формат данных
                             data: $("#addform").serialize(),  // Сериализуем объект
@@ -132,14 +170,60 @@
                         });
 
                     }
-                    
-
                 }
             );
 
-            
+
+            //регистрация
+            $("#register").click(function(e){
+                e.preventDefault()
+
+                var html =`<div class="col-md-12 blog-post">
+                    <div class="post-title">
+                        <h1>Register</h1>
+                    </div> 
+
+                    <form name="registerform" id="registerform">
+
+                        <div class="col-sm-12">
+                            <p>Name:</p>
+                            <p><input type="text" id="name" name="name" class="form-control" placeholder="Name"></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <p>Password:</p>
+                            <p><input type="password" id="password" name="password" class="form-control" placeholder="Password"></p>
+                        </div>
+                        <div class="text-center">      
+                            <button type="submit" id="registerbutton" class="load-more-button">Submit</button>
+                        </div>
+
+                    </form>
+                </div>`
+
+                $('#bloglist').html(html)
+                $("#load-more-post").hide()
+            })
+
             $("#bloglist").click(function(e){
                 e.preventDefault()
+
+                //обработка фомы регистрации
+                if (e.target.id === "registerbutton"){
+                    $.ajax({
+                        url:     "/register", //url страницы 
+                        type:     "POST", //метод отправки
+                        dataType: "html", //формат данных
+                        data: $("#registerform").serialize(),  // Сериализуем объект
+                        success: function(response) { //Данные отправлены успешно
+                            var result = $.parseJSON(response);
+                            $('#bloglist h1').text(result.hint);
+                        },
+                        error: function(response) { // Данные не отправлены
+                            var result = $.parseJSON(response.responseText);
+                            $('#bloglist h1').text(result.hint);
+                        }
+                    });
+                }
 
                 // аякс подгрузка конкретного сообщения по клике в списке
                 if (e.target.nodeName === "A"){
@@ -148,6 +232,8 @@
                     $.ajax({
                         url, 
                         success: function(result){
+                            console.log(JWToken)
+                            result = result._doc
                             var html =`<div class="col-md-12 blog-post">
                                 
                             <div class="post-title">
@@ -162,35 +248,37 @@
                                     <span>Category: ${tagRemover(result.category)}</span>
                                 </div>  
                                 <p>${tagRemover(result.postbody)}</p>    
-                            </div>  
+                            </div>`
                             
-                            <form name="editform"  style="display: none" id="editform">
+                            if(JWToken){
+                                html += `<form name="editform"  style="display: none" id="editform">
 
-                                <div class="col-sm-12">
-                                    <p>Title:</p>
-                                    <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${tagRemover(result.title)}"></p>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="textarea-message form-group">
-                                        <p>Post:</p>
-                                        <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${tagRemover(result.postbody)}</textarea>
+                                    <div class="col-sm-12">
+                                        <p>Title:</p>
+                                        <p><input type="text" id="title" name="title" class="form-control" placeholder="Title" value="${tagRemover(result.title)}"></p>
                                     </div>
-                                </div>
-                                <div class="text-center">      
-                                    <button type="submit" data-id="${result._id}" id="editsubmitbutton" class="load-more-button">Edit</button>
-                                </div>
-               
-                            </form>
+                                    <div class="col-sm-12">
+                                        <div class="textarea-message form-group">
+                                            <p>Post:</p>
+                                            <textarea id="postbody" name="postbody" class="textarea-message form-control" placeholder="Your post" rows="5">${tagRemover(result.postbody)}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">      
+                                        <button type="submit" data-id="${result._id}" id="editsubmitbutton" class="load-more-button">Edit</button>
+                                    </div>
+                
+                                </form>
+                                
+                                <div>
+                                    <ul class="knowledge">
+                                        <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
+                                        <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
+                                    </ul>
+                                </div>`
+                            }
 
-                            <div>
-                                <ul class="knowledge">
-                                    <li class="bg-color-4" data-id="${result._id}" id="edit">Edit</li>
-                                    <li class="bg-color-5" data-id="${result._id}" id="delete">Delete</li>
-                                </ul>
-                            </div> 
+                            html += "</div>"
 
-                        </div>`
-                            
                             $('#bloglist').html(html)
                             $("#load-more-post").hide()
                         }
@@ -208,6 +296,9 @@
                     $.ajax({
                         type: "PUT",
                         url: `/posts/${e.target.dataset.id}`, 
+                        beforeSend: function (xhr) { //наш токен любимый 
+                            xhr.setRequestHeader('Authorization', JWToken);
+                        },
                         dataType: "html", //формат данных
                         data: form.serialize(),  // Сериализуем объект
                         success: function(response){
@@ -242,8 +333,10 @@
                     $.ajax({
                         type: "DELETE",
                         url: `/posts/${id}`, 
+                        beforeSend: function (xhr) { //наш токен любимый 
+                            xhr.setRequestHeader('Authorization', JWToken);
+                        },
                         success: function(result){
-                            
                             htmlPost =`<div class="col-md-12 blog-post">
                                 <div class="post-title">
                                     <h1>${tagRemover(result.deleted.title)} deleted!</h1>
