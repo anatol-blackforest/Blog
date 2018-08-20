@@ -111,6 +111,9 @@
                 JWToken = null
                 $("#loginform").show()
                 $("#logout").hide()
+                $("#addpost").hide()
+                $("#addformblock").hide()
+                
             })
 
             //добавление поста
