@@ -11,4 +11,3 @@ module.exports = async (payload, done) => {
         console.log(e)
     }
 };
-

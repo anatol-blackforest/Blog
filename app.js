@@ -26,17 +26,11 @@ app.use(passport.initialize());
 //коннекты к базе
 app.use(async(req, res, next) => await connection(req, next))
 
-//проверяем админский хэш в сессии
-
+//JWT стратегия авторизации - проверка токена
 passport.use(new Strategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: key
 }, (payload, done) => passportCtrl(payload, done)))
-
-// passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
-
-// passport.serializeUser((user, done) => done(null, user));
-// passport.deserializeUser((user, done) => done(null, user));
 
 app.use('/', homeRouter);
 app.use('/posts', postsRouter);
