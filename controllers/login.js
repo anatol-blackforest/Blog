@@ -6,10 +6,8 @@ const {key} = require('../config');
 
 module.exports = async (req, res, next) => {
     try{
-        console.log(req.body)
         password = crypto(req.body.password)
         let admin = await Admin.findOne({name: req.body.name, password})
-        console.log(admin)
         if (admin) {
             // Генерация токена, пароли совпали
             const token = jwt.sign({

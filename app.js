@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const {Strategy, ExtractJwt} = require('passport-jwt')
 
-const {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter, logoutRouter} = require('./routes/');
+const {homeRouter, postsRouter, categoryRouter, pageRouter, registerRouter, loginRouter} = require('./routes/');
 const {passportCtrl} = require('./controllers');
 const {connection} = require('./models');
 const {key} = require('./config');
@@ -33,7 +33,6 @@ passport.use(new Strategy({
     secretOrKey: key
 }, (payload, done) => passportCtrl(payload, done)))
 
-
 // passport.use(new LocalStrategy({passReqToCallback : true}, (req, username, password, done) => getAccount(req, username, password, done).catch(() => done(null, false))));
 
 // passport.serializeUser((user, done) => done(null, user));
@@ -45,7 +44,6 @@ app.use('/page', pageRouter);
 app.use('/category', categoryRouter);
 app.use('/register', registerRouter);
 app.use('/login/', loginRouter);
-app.use('/logout/', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
