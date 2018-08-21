@@ -99,9 +99,11 @@
                         $("#loginform").hide()
                         $("#logout").show()
                         $("#addpost").show()
+                        $('#loginform h4').text("Login");
                     },
                     error: function(response) { // Данные не отправлены
-                        console.log(response)
+                        var {hint} = $.parseJSON(response.responseText);
+                        $('#loginform h4').text(hint);
                     }
                 });
             })
@@ -164,7 +166,7 @@
                                 $('#cats').html(htmlCats)
                             },
                             error: function() { // Данные не отправлены
-                                $('#result_form').html('Ошибка. Данные не отправлены.');
+                                $('#bloglist').html('Ошибка. Данные не отправлены.');
                             }
                         });
 
