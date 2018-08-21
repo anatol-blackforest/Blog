@@ -111,6 +111,7 @@
             //выход
             $("#logoutbutton").on('click', function(e){
                 JWToken = null
+                $('a.posts').trigger('click');
                 $("#loginform").show()
                 $("#logout").hide()
                 $("#addpost").hide()
