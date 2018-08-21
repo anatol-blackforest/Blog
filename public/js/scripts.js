@@ -100,6 +100,7 @@
                         $("#logout").show()
                         $("#addpost").show()
                         $('#loginform h4').text("Login");
+                        $('a.posts').trigger('click');
                     },
                     error: function(response) { // Данные не отправлены
                         var {hint} = $.parseJSON(response.responseText);
